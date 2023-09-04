@@ -2,10 +2,13 @@ import { createContext, useReducer } from "react";
 
 export const SourceOfFundContext = createContext({
   sourceOfFund: [],
-  addSourceOfFund: ({ accountName, balance, Addeddate }) => {},
+  addSourceOfFund: ({ accountName, initialBalance, balance, Addeddate }) => {},
   getSourceOfFund: (sourceOfFund) => {},
   deleteSourceOfFund: (id) => {},
-  updateSourceOfFund: (id, { accountName, balance, Addeddate }) => {},
+  updateSourceOfFund: (
+    id,
+    { accountName, initialBalance, balance, Addeddate }
+  ) => {},
 });
 
 const SourceOfFundReducer = (state, action) => {

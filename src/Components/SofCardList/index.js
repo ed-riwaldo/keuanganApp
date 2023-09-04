@@ -13,8 +13,9 @@ const SourceOfFundCardList = ({ sourceOfFunds, onPress }) => {
           <>
             <SofCard
               accountName={item.accountName}
-              balance={item.balance}
+              initialBalance={item.initialBalance}
               addedDate={item.date}
+              currentBalance={item.balance}
               onPress={(onPress, console.log(sourceOfFunds))} // Pass onPress function to SofCard if needed
             />
           </>

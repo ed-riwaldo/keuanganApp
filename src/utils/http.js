@@ -67,6 +67,7 @@ export const fetchSourceOfFund = async () => {
       id: key,
       accountName: response.data[key].accountName,
       balance: response.data[key].balance,
+      initialBalance: response.data[key].initialBalance,
       date: response.data[key].date,
     };
     sourceOfFundsData.push(sourceOfFundObj);

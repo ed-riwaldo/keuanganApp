@@ -1,12 +1,19 @@
 import { Text, View } from "react-native";
 import { styles } from "./style";
 
-const SofCard = ({ accountName, balance, addedDate, sourceOfFund }) => {
+const SofCard = ({
+  accountName,
+  initialBalance,
+  addedDate,
+  sourceOfFund,
+  currentBalance,
+}) => {
   return (
     <View>
       <View style={styles.card}>
         <Text>{accountName}</Text>
-        <Text>{balance}</Text>
+        <Text>initial balance = {initialBalance}</Text>
+        <Text>Current balance = {currentBalance}</Text>
         <Text>{addedDate}</Text>
       </View>
     </View>

@@ -74,57 +74,17 @@ const ManageTransactions = ({ route, navigation }) => {
       (source) => source.id === choosenSofId
     );
 
+    const calculateCurrentBalance = (data) => {
+      let currentBalance = currentSourceOfFund.initialBalance;
+      data.forEach((entry) => {
+        if (entry.sof === currentSourceOfFund.accountName) {
+          currentBalance += entry.amount;
+        }
+      });
+      return currentBalance;
+    };
+
     const updateBalanceHandler = () => {
-      //di sini perlu kasih kondisi if editing, maka initial balancenya akan sama.
-
-      //kalau expense
-
-      console.log(
-        "source of fund balance & amount in field",
-        // currentSourceOfFund.balance,
-        balanceFromAmount,
-        SelectedTransaction.amount
-      );
-
-      // if (SelectedTransaction.amount === balanceFromAmount) {
-      //   return currentSourceOfFund.balance;
-      // } else if (SelectedTransaction.amount !== balanceFromAmount) {
-      //   if (isEditing) {
-      //     if (transactionData.type === "Income") {
-      //       const adding = (SelectedTransaction.amount = balanceFromAmount);
-      //       console.log(adding);
-      //       return adding;
-      //     } else if (transactionData.type === "Expense") {
-      //       const subtract = (SelectedTransaction.amount = balanceFromAmount);
-      //       console.log(subtract);
-      //       return subtract;
-      //     }
-      //   } else {
-      //     if (transactionData.type === "Income") {
-      //       const adding = currentSourceOfFund.balance + balanceFromAmount;
-      //       console.log(adding);
-      //       return adding;
-      //     } else if (transactionData.type === "Expense") {
-      //       const subtract = currentSourceOfFund.balance - balanceFromAmount;
-      //       console.log(subtract);
-      //       return subtract;
-      //     }
-      //   }
-      // }
-
-      // if (isEditing) {
-      //   if (SelectedTransaction.amount === balanceFromAmount) {
-      //     return currentSourceOfFund.balance;
-      //   } else if (SelectedTransaction.amount !== balanceFromAmount) {
-      //     if (transactionData.type === "Income") {
-      //       const adding = currentSourceOfFund.balance + balanceFromAmount;
-      //       return adding
-      //     } else if (transactionData.type === "Expense") {
-      //       const subtract = currentSourceOfFund.balance - balanceFromAmount;
-      //       return subtract
-      //   }
-      // }
-
       if (transactionData.type === "Income") {
         const adding = currentSourceOfFund.balance + balanceFromAmount;
         console.log(adding);
@@ -136,7 +96,11 @@ const ManageTransactions = ({ route, navigation }) => {
       }
     };
 
-    const updatedBalance = updateBalanceHandler();
+    //dapatkan current saldo dari account
+    //tambahkan current saldo dengan semua amount
+
+    // const updatedBalance = updateBalanceHandler();
+    const updatedBalance = calculateCurrentBalance(transactionData);
 
     const updatedSourceOfFund = {
       ...currentSourceOfFund,

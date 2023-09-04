@@ -10,12 +10,15 @@ const SourceOfFundForm = ({ defaultValues, onSubmit }) => {
       value: defaultValues ? defaultValues.accountName.toString() : "",
       isValid: true,
     },
-    balance: {
-      value: defaultValues ? defaultValues.balance.toString() : "",
-      isValid: true,
-    },
     date: {
       value: defaultValues ? getFormattedDate(defaultValues.date) : "",
+      isValid: true,
+    },
+    initialBalance: {
+      value: defaultValues ? defaultValues.initialBalance.toString() : "",
+    },
+    balance: {
+      value: defaultValues ? defaultValues.balance.toString() : "",
       isValid: true,
     },
   });
@@ -32,8 +35,9 @@ const SourceOfFundForm = ({ defaultValues, onSubmit }) => {
   const onSubmitHandler = () => {
     const sourceOfFundData = {
       accountName: inputs.accountName.value,
-      balance: +inputs.balance.value,
+      initialBalance: +inputs.initialBalance.value,
       date: inputs.date.value,
+      balance: 0,
     };
 
     onSubmit(sourceOfFundData);
@@ -46,11 +50,11 @@ const SourceOfFundForm = ({ defaultValues, onSubmit }) => {
         style={styles.input}
         onChangeText={inputChangedHandler.bind(this, "accountName")}
       />
-      <Text>Balance</Text>
+      <Text>Initial balance</Text>
       <TextInput
         style={styles.input}
         inputMode="numeric"
-        onChangeText={inputChangedHandler.bind(this, "balance")}
+        onChangeText={inputChangedHandler.bind(this, "initialBalance")}
       />
       <Text>Date</Text>
       <TextInput
