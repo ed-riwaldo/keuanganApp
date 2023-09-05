@@ -15,27 +15,24 @@ import { SourceOfFundContext } from "../../store/sourceOfFundContext";
 const ManageTransactions = ({ route, navigation }) => {
   //context
   const transactionCtx = useContext(TransactionsContext);
-  const sourceOfFundCtx = useContext(SourceOfFundContext);
-
+  const sofCtx = useContext(SourceOfFundContext);
   //di sini kita mengambil ide transaction untuk menandakan transaksi yang sedang diedit
   const editedTransactionId = route.params?.transactionId;
   // di sini bolean kalau editedTransactionya ada, maka user dipastikan melakukan edit transaksi
   const isEditing = !!editedTransactionId;
-
   //di sini kita mencari transaction yang punya id === editedTransactionId dari context
   const SelectedTransaction = transactionCtx.transactions.find(
     (transaction) => transaction.id === editedTransactionId
   );
 
-  //di sini jalanin use effect untuk kondisi user mau edit maka headernya akan jadi edit transaction kalau mau buat transaksi baru maka headernya akan jadi Add transaction
+  //use effect untuk mengubah title
   useEffect(() => {
     navigation.setOptions({
       title: isEditing ? "Edit Transaction" : "Add Transaction",
     });
   }, [navigation, isEditing]);
 
-  //ini untuk mencari data source of fund yang diambil dari database
-  const sofCtx = useContext(SourceOfFundContext);
+  //use effect untuk fetching data
   useEffect(() => {
     async function getSourceOfFund() {
       try {
@@ -67,47 +64,45 @@ const ManageTransactions = ({ route, navigation }) => {
       return matchingSourceOfFund ? matchingSourceOfFund.id : null;
     }
 
+    // Function to calculate the updated balance
+    function calculateUpdatedBalance(sourceOfFund, transactions) {
+      const accountName = sourceOfFund.accountName;
+
+      // Filter transactions that match the account name
+      const matchingTransactions = transactions.filter(
+        (transaction) => transaction.sof === accountName
+      );
+
+      // Calculate the sum of transaction amounts
+      const totalAmount = matchingTransactions.reduce(
+        (sum, transaction) => sum + transaction.amount,
+        0
+      );
+
+      // Calculate the updated balance
+      const updatedBalance = sourceOfFund.initialBalance - totalAmount;
+
+      return updatedBalance;
+    }
+
     const choosenSofId = findIdByAccountName(transactionData.sof);
-    const balanceFromAmount = transactionData.amount;
 
     const currentSourceOfFund = sofCtx.sourceOfFund.find(
       (source) => source.id === choosenSofId
     );
 
-    const calculateCurrentBalance = (data) => {
-      let currentBalance = currentSourceOfFund.initialBalance;
-      data.forEach((entry) => {
-        if (entry.sof === currentSourceOfFund.accountName) {
-          currentBalance += entry.amount;
-        }
-      });
-      return currentBalance;
-    };
-
-    const updateBalanceHandler = () => {
-      if (transactionData.type === "Income") {
-        const adding = currentSourceOfFund.balance + balanceFromAmount;
-        console.log(adding);
-        return adding;
-      } else if (transactionData.type === "Expense") {
-        const subtract = currentSourceOfFund.balance - balanceFromAmount;
-        console.log(subtract);
-        return subtract;
-      }
-    };
-
-    //dapatkan current saldo dari account
-    //tambahkan current saldo dengan semua amount
-
-    // const updatedBalance = updateBalanceHandler();
-    const updatedBalance = calculateCurrentBalance(transactionData);
+    // Calculate the updated balance
+    const updatedBalance = calculateUpdatedBalance(
+      currentSourceOfFund,
+      transactionCtx.transactions
+    );
 
     const updatedSourceOfFund = {
       ...currentSourceOfFund,
       balance: updatedBalance,
     };
 
-    sourceOfFundCtx.updateSourceOfFund(choosenSofId, updatedSourceOfFund);
+    sofCtx.updateSourceOfFund(choosenSofId, updatedSourceOfFund);
     await updateSourceOfFund(choosenSofId, updatedSourceOfFund);
 
     navigation.goBack();
