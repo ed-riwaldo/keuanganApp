@@ -6,12 +6,14 @@ import SourceOfFundCardList from "../../Components/SofCardList";
 import { useContext, useEffect, useState } from "react";
 import { SourceOfFundContext } from "../../store/sourceOfFundContext";
 import { fetchSourceOfFund } from "../../utils/http";
+import { TransactionsContext } from "../../store/transactionsContext";
 
 const SourceOfFund = ({ navigation, route }) => {
   const [isFetching, setIsFetching] = useState(true);
   const [error, setError] = useState();
 
   const sofCtx = useContext(SourceOfFundContext);
+  const transactionCtx = useContext(TransactionsContext);
 
   useEffect(() => {
     async function getSourceOfFund() {

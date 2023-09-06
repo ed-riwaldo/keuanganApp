@@ -23,7 +23,7 @@ const TransactionForm = ({ defaultValues, onSubmit, addedAmount }) => {
       isValid: true,
     },
     amount: {
-      value: defaultValues ? defaultValues.amount.toString() : "100",
+      value: defaultValues ? defaultValues.amount.toString() : "",
       isValid: true,
     },
     detail: {
