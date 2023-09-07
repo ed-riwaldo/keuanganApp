@@ -128,8 +128,12 @@ const TransactionForm = ({ defaultValues, onSubmit, addedAmount }) => {
       <TextInput
         style={styles.input}
         inputMode="numeric"
-        onChangeText={inputChangedHandler.bind(this, "amount")}
-        value={inputs.amount.value}
+        // onChangeText={inputChangedHandler.bind(this, "amount")}
+        value={
+          selectedType === "Expense" && inputs.amount.value !== ""
+            ? "-" + inputs.amount.value
+            : inputs.amount.value
+        }
       />
       <Text>Detail</Text>
       <TextInput
